@@ -7,14 +7,20 @@ const log = require('db.log')
 
 exports.zipCodeParam = (req, res, next, code) => {
   // fetch the necessary fields for the result
+  let attributes = ['code', 'city', 'state']
+  // add latitude and longitude if request query includes precise
+  if (req.query['precise']) attributes = attributes.concat('latitude', 'longitude')
+
   ZipCode
-    .find({where: { code }, attributes: ['code', 'city', 'state']})
+    .find({where: { code }, attributes})
     .then((result) => {
       if(!result){
         res.end('No result with that code')
         return
       }
 
+      // capitalize only the first letter of each word in the city name
+      result.city = result.city.toLowerCase().replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
       // attach result to the request object
       req.result = result
       next()

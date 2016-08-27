@@ -12,7 +12,11 @@ const ZipCode = db.define('zip_code', {
 
   city: dataTypes.STRING,
 
-  state: dataTypes.STRING
+  state: dataTypes.STRING,
+
+  latitude: dataTypes.FLOAT,
+
+  longitude: dataTypes.FLOAT
 
 })
 
